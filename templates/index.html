@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>Toko Buah Jaya</h1>
+    <table border="1" cellpadding="4" cellspacing="0">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Buah</th>
+                <th>Stok</th>
+            </tr>
+        </thead>
+        <tbody id="target"></tbody>
+    </table>
+
+    <button onclick="store()">Tambah Buah</button>
+
+    <script>
+        function store(){
+            buah = {
+                nama: "Jeruk",
+                stok: 10
+            }
+
+            $.ajax({
+                url: '/store_fruit',
+                type: "POST",
+                data: buah,
+                success: function(response){
+                    alert(response.message)
+                    window.location.reload()
+                }
+            })
+        }
+
+        $(document).ready(() => {
+            $.ajax({
+                url: '/get_fruits',
+                type: "GET",
+                success: function(response){
+                    response.buah.forEach(function(item, index){
+                        $('#target').append(`
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${item.nama}</td>
+                            <td>${item.stok}</td>
+                        </tr>
+                        `)
+                    })
+                }
+            })
+        })
+    </script>
+
+</body>
+</html>
